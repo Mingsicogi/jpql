@@ -7,7 +7,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,6 +41,8 @@ public class Main {
                 .getSingleResult();
         System.out.println("### " + dbInfo.getUsername());
 
+
+
         System.out.println("\n\n==================================================\n\n");
 
         dbInfo.setAge(10); // update query가 실행되는걸로 보았을때 조회된 객체는 영속화됨.
@@ -62,7 +66,25 @@ public class Main {
         System.out.println("### " + memberDtoInfo.getAge());
 
 
+
+
         System.out.println("\n\n==================================================\n\n");
+
+        // 페이징
+        Stream.iterate(1, i -> i < 100, i -> i + 1).forEach(i -> {
+            Member dbParam = new Member();
+            dbParam.setAge(i);
+            dbParam.setUsername("minssogi" + i);
+            em.persist(dbParam);
+        });
+
+        List<Member> dbInfoList2 = em.createQuery("select m from Member m order by m.age desc ", Member.class)
+                .setFirstResult(0)
+                .setMaxResults(20)
+                .getResultList();
+        System.out.println("### " + dbInfoList2.size());
+        dbInfoList2.forEach(a -> System.out.println(a.toString()));
+
 
         tx.commit();
 
