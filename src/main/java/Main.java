@@ -20,7 +20,6 @@ public class Main {
 
         Team team = new Team();
         team.setName("TeamA");
-
         em.persist(team);
 
         Member member = new Member();
@@ -48,7 +47,7 @@ public class Main {
         dbInfo.setAge(10); // update query가 실행되는걸로 보았을때 조회된 객체는 영속화됨.
 
         // 엔티티 프로젝션
-        Team teamDbInfo = em.createQuery("select t from Member m inner join Team t on m.team.id = t.id and m.username=:username", Team.class)
+        Team teamDbInfo = em.createQuery("select m.team from Member m inner join m.team where m.username=:username", Team.class)
                 .setParameter("username", "minssogi")
                 .getSingleResult();
         System.out.println("### " + teamDbInfo.getName());
@@ -84,6 +83,22 @@ public class Main {
                 .getResultList();
         System.out.println("### " + dbInfoList2.size());
         dbInfoList2.forEach(a -> System.out.println(a.toString()));
+
+
+
+
+        System.out.println("\n\n==================================================\n\n");
+
+        // 조인
+        List<Member> resultList = em.createQuery("select m from Member m inner join m.team t on t.name = 'teamA'", Member.class)
+                .getResultList();
+//        resultList.forEach(a -> System.out.println(a.toString()));
+
+        List<Member> resultList2 = em.createQuery("select m from Member m left outer join m.team", Member.class)
+                .getResultList();
+
+        List<Member> resultList3 = em.createQuery("select m from Member m, Team t", Member.class)
+                .getResultList();
 
 
         tx.commit();

@@ -31,9 +31,13 @@ public class Member {
     @OneToMany(mappedBy = "member") // 양방향 설정
     private List<Order> orders = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
-
+    // 연관관계 편의 메소드
+    public void setTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this);
+    }
 }
