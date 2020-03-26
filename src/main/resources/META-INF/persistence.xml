@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
+    <persistence-unit name="minsMall">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="root!123123"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mins_jpql"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/><!-- 방언설정. oracle 등으로 변경하면 손쉽게 DDL 쿼리 변경가능. -->
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="10"/> <!-- 쿼리를 모아서 한번에 실행시키는 사이 -->
+            <property name="hibernate.hbm2ddl.auto" value="create" /><!-- DDL create table 작업이 필요없음(DROP + CREATE) -->
+            <!-- 운영은 무조건 none으로 권장함. DDL은 잘못 사용하게 되면 DB서버에 장애가 발생함. -->
+<!--            <property name="hibernate.hbm2ddl.auto" value="create-drop" />&lt;!&ndash; create와 같으나 종료시점에 테이블 DROP &ndash;&gt;-->
+<!--            <property name="hibernate.hbm2ddl.auto" value="update" />&lt;!&ndash; 변경분만 반영(운영DB에는 사용하면 안됨) &ndash;&gt;-->
+<!--            <property name="hibernate.hbm2ddl.auto" value="validate" />&lt;!&ndash; 엔티티와 테이블이 정상 매핑되었는지만 확인 &ndash;&gt;-->
+<!--            <property name="hibernate.hbm2ddl.auto" value="none" />&lt;!&ndash; 사용하지 않음 &ndash;&gt;-->
+        </properties>
+    </persistence-unit>
+
+</persistence>
