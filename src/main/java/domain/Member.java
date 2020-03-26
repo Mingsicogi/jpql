@@ -23,6 +23,9 @@ public class Member {
 
     private int age;
 
+    @Embedded
+    private Address address;
+
     @OneToMany(mappedBy = "member") // 양방향 설정
     private List<Order> orders = new ArrayList<>();
 
