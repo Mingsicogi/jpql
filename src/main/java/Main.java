@@ -99,8 +99,6 @@ public class Main {
 
         List<Member> resultList3 = em.createQuery("select m from Member m, Team t", Member.class)
                 .getResultList();
-
-
         tx.commit();
 
         em.close();
