@@ -99,8 +99,19 @@ public class Main {
 
         List<Member> resultList3 = em.createQuery("select m from Member m, Team t", Member.class)
                 .getResultList();
-        tx.commit();
 
+
+
+        System.out.println("\n\n==================================================\n\n");
+        // sub-query
+        List<Member> resultList4 = em.createQuery("select m from Member m where m.age > (select avg(m1.age) from Member m1)", Member.class)
+                .getResultList();
+
+        List<Member> resultList5 = em.createQuery("select m from Member m where (select count(o) from Order o where m = o.member) > 0", Member.class)
+                .getResultList();
+
+
+        tx.commit();
         em.close();
         emf.close();
     }
