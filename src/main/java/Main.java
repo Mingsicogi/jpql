@@ -3,10 +3,7 @@ import domain.Member;
 import domain.Team;
 import dto.MemberDTO;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,6 +25,17 @@ public class Main {
         member.setAddress(new Address("seoul", "d", "c"));
 
         em.persist(member);
+
+        em.flush();
+        em.clear();
+
+        Member member2 = new Member();
+        member2.setUsername("minssogi2");
+        member2.setAge(50);
+        member2.setTeam(team);
+        member2.setAddress(new Address("seoul", "d", "c"));
+
+        em.persist(member2);
 
         em.flush();
         em.clear();
@@ -110,6 +118,36 @@ public class Main {
         List<Member> resultList5 = em.createQuery("select m from Member m where (select count(o) from Order o where m = o.member) > 0", Member.class)
                 .getResultList();
 
+        // 조건식
+        List<String> resultList1 = em.createQuery(
+                "select " +
+                        "   case " +
+                        "       when m.age <= 10 then 'student'" +
+                        "       when m.age > 60 then 'older'" +
+                        "       else '일반'" +
+                        "   end " +
+                        "from Member m", String.class).getResultList();
+        resultList1.forEach(System.out::println);
+        // 단순 조건
+        List<String> resultList6 = em.createQuery(
+                "select " +
+                        "   case t.name" +
+                        "       when 'TeamA' then 'A'" +
+                        "       when 'TeamB' then 'B'" +
+                        "       else 'C'" +
+                        "   end " +
+                        "from Member m inner join Team t on m.team.id = t.id", String.class
+        ).getResultList();
+        resultList6.forEach(System.out::println);
+        // coalesce, nullif
+        List<String> s = em.createQuery("select coalesce(m.username, '이름 없음') from Member m", String.class).getResultList();
+        s.forEach(System.out::println);
+        List<String> resultList7 = em.createQuery("select NULLIF(m.username, 'admin') from Member m", String.class).getResultList();
+        resultList7.forEach(System.out::println);
+
+        // jpql basic function
+        String singleResult = em.createQuery("select concat('aaa', 'bbb', 'cccc')", String.class).getSingleResult();
+        System.out.println(singleResult);
 
         tx.commit();
         em.close();
