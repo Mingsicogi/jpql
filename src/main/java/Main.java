@@ -146,8 +146,8 @@ public class Main {
         resultList7.forEach(System.out::println);
 
         // jpql basic function
-        String singleResult = em.createQuery("select concat('aaa', 'bbb', 'cccc')", String.class).getSingleResult();
-        System.out.println(singleResult);
+        List<String> singleResult = em.createQuery("select concat('aaa', 'bbb', 'cccc') from Member m", String.class).getResultList();
+        singleResult.forEach(System.out::println);
 
         tx.commit();
         em.close();
