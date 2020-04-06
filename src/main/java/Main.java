@@ -149,6 +149,8 @@ public class Main {
         List<String> singleResult = em.createQuery("select concat('aaa', 'bbb', 'cccc') from Member m", String.class).getResultList();
         singleResult.forEach(System.out::println);
 
+
+
         tx.commit();
         em.close();
         emf.close();
